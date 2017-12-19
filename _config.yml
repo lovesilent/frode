@@ -1,3 +1,74 @@
-theme: jekyll-theme-hacker
-title: LOVESILENT
-description: FRODE WU LIFE
+# Welcome to Jekyll!
+#
+# This config file is meant for settings that affect your whole blog, values
+# which you are expected to set up once and rarely need to edit after that.
+# For technical reasons, this file is *NOT* reloaded automatically when you use
+# 'jekyll serve'. If you change this file, please restart the server process.
+
+# Site title
+title: "LoveSilent"
+
+# A description of your site for social meta tag, search engines, and feed.xml
+description: "LoveSilent is a Jekyll blog."
+
+# Tagline near the site title
+tagline: "Thoughts, stories and ideas."
+
+# The subpath of your site, e.g. /blog, for generating urls
+baseurl:
+
+sass:
+  sass_dir: _sass
+
+# The base hostname & protocol of your site for where absolute urls are needed
+url: "https://lovesilent.org"
+
+# Site navigation - each item must have a title and a url.
+navigation:
+- text: Home
+  url: /
+- text: About
+  url: /about/
+# - text: Style Guides
+#   url: /style-guide/
+- text: Archives
+  url: /tags/
+
+# The shortname for your Disqus site to enable comments.
+disqus:
+
+# Author information - author info at the bottom of the post
+author_name: "Frode Wu"
+author_bio: "Frode is an engineer, designer, photographer and gamer."
+author_url:  "https://lovesilent.org"
+author_location: "Shanghai, China"
+author_image: /images/authorimage.png
+
+# Sidebar Add banner
+# banner_url: "https://lovesilent.org"
+# banner_image: images/banner.jpg
+
+# Sidebar newsletter widget - add your form action url for MailChimp signup form here
+# mailchimp_url: "//justgoodthemes.us3.list-manage.com/subscribe/post?u=78f1bab16028354caeb23aecd&amp;id=4a7330d117"
+
+# Social links in the site footer
+twitter_username: "yuwu"
+facebook_username: "yu.wu.silence"
+# googleplus_username: "+username"
+github_username: "lovesilent"
+# codepen_username: "username"
+# dribbble_uername: "username"
+# medium_username: "@username"
+instagram_username: "love__silent"
+# pinterest_username: "username"
+linkedin_username: "frodewu"
+
+# http://jekyllrb.com/docs/pagination/
+paginate: 5
+paginate_path: '/blog/page:num/'
+gems: [jekyll-paginate]
+
+permalink: pretty
+markdown: kramdown
+kramdown:
+    auto_ids: false
