@@ -1,5 +1,5 @@
 /**
- * Main JS file for BlogInn behaviours
+ * Main JS file for LoveSilent behaviours
  */
 
 /*globals jQuery, document */
