@@ -8,7 +8,7 @@ tags: [tech]
 虽然可以直接使用Markdown来书写公式，但是用起来很繁琐，大多数时候还不如直接链接图片来得爽快。自从发现[Stackoverflow](https://stackoverflow.com)上的公式竟然如此精美，便决定借助[MathJax](https://www.mathjax.org/)来书写公式。
 
 <!--more-->
-直接上图，发现右键还有额外功能:bowtie:&#x1F34E;:smiley_cat.
+直接上图，发现右键还有额外功能&#x1F34E;
 
 $$\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-2\pi}} {1+\frac{e^{-4\pi}} {1+\frac{e^{-6\pi}} {1+\frac{e^{-8\pi}} {1+\cdots} } } }$$
 
