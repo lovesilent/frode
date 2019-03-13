@@ -268,7 +268,7 @@ int window_client_x0; //用于存储dd窗口模式，客户区域的左上角的
 
 <u>用于储存查找表</u>
 
-```
+```C++
 float cos_look[360];
 float sin_look[360];
 ```
@@ -278,14 +278,6 @@ float sin_look[360];
 ```C++
 USHORT (*RGB16Bit)(int r, int g, int b);
 ```
-
-{% highlight c++ %}
-
-USHORT (*RGB16Bit)(int r, int g, int b);
-
-{% endhighlight%}
-
-
 
 {% include image_full.html imageurl="/images/posts/better-1.jpg" title="change" caption="change" %}
 
