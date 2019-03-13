@@ -221,7 +221,7 @@ char error_filename[80]; //错误文件名
 
 <u>使用的很多接口是7.0版本的</u>
 
-```C++
+```c++
 LPDIRECTDRAW7 lpdd; //dd对象
 LPDIRECTDRAWSURFACE7 lpddsprimary; //dd主缓存
 LPDIRECTDRAWSURFACE7 lpdddback; //dd后缓存
@@ -248,7 +248,7 @@ int windowed_mode; //记录dd是否处于窗口模式
 
 <u>这些变量定义了软件裁剪时使用的裁剪矩形</u>
 
-```C++
+```c++
 int min_clip_x, //裁剪举行
   max_clip_x,
   min_clip_y,
@@ -257,7 +257,7 @@ int min_clip_x, //裁剪举行
 
 <u>调用DD_Init()时将覆盖这些变量的值</u>
 
-```C++
+```c++
 int screen_width, //屏幕宽度
   screen_height, //屏幕高度
   screen_bpp, //每个像素占用多少位
@@ -268,14 +268,14 @@ int window_client_x0; //用于存储dd窗口模式，客户区域的左上角的
 
 <u>用于储存查找表</u>
 
-```C++
+```c++
 float cos_look[360];
 float sin_look[360];
 ```
 
 <u>指向RGB16颜色生成函数的指针，这两个函数分别生成5.5.5和5.6.5格式的颜色值</u>
 
-```C++
+```c++
 USHORT (*RGB16Bit)(int r, int g, int b);
 ```
 
