@@ -7,11 +7,11 @@ tags: [Game Programming]
 ---
 《3D游戏编程大师技巧》 笔记
 
-T3DLIB库
+   T3DLIB库
 
-- T3DLIB1.CPP|H -- DirectDraw 和图形算法
-- T3DLIB2.CPP|H -- DirectInput
-- T3DLIB3.CPP|H -- DirectSound 和 DirectMusic
+- T3DLIB1.CPP/H -- DirectDraw 和图形算法
+- T3DLIB2.CPP/H -- DirectInput
+- T3DLIB3.CPP/H -- DirectSound 和 DirectMusic
 
 <!--more-->
 
@@ -279,9 +279,15 @@ float sin_look[360];
 USHORT (*RGB16Bit)(int r, int g, int b);
 ```
 
+{% highlight cpp %}
+
+USHORT (*RGB16Bit)(int r, int g, int b);
+
+{% highlight%}
 
 
-{% include image_full.html imageurl="/images/posts/change.jpg" title="change" caption="change" %}
+
+{% include image_full.html imageurl="/images/posts/better-1.jpg" title="change" caption="change" %}
 
 
 ### Poetry
