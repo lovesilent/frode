@@ -283,7 +283,7 @@ USHORT (*RGB16Bit)(int r, int g, int b);
 
 USHORT (*RGB16Bit)(int r, int g, int b);
 
-{% highlight%}
+{% endhighlight%}
 
 
 
