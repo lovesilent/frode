@@ -279,7 +279,7 @@ float sin_look[360];
 USHORT (*RGB16Bit)(int r, int g, int b);
 ```
 
-{% highlight cpp %}
+{% highlight c++ %}
 
 USHORT (*RGB16Bit)(int r, int g, int b);
 
