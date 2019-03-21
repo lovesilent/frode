@@ -1,7 +1,7 @@
 ---
 layout: post
-title:  "Game Programming Notes -- T3DLIB1_2"
-date:   2019-03-18
+title:  "Game Programming Notes -- T3DLIB1_3"
+date:   2019-03-21
 banner_image: solo.jpg
 tags: [Game Programming]
 ---
