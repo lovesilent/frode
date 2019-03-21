@@ -19,7 +19,7 @@ T3DLIB1之2D多边形函数
 
 *Draw_Triangle_2D*
 
-```C++
+```c++
 void Draw_Triangle_2D(int x1, int y1, //三角形顶点
 	int x2, int y2,
 	int x3, int y3,
@@ -48,7 +48,7 @@ void Draw_Triangle_2D16(int x1, int y1,
 
 *Draw_QuadFP_2D*
 
-```C++
+```c++
 inline void Draw_QuadFP_2D(int x0, int y0,
                           int x1, int y1,
                           int x2, int y2,
@@ -62,7 +62,7 @@ inline void Draw_QuadFP_2D(int x0, int y0,
 
 *Draw_Filled_Polygon2D*
 
-```C++
+```c++
 void Draw_Filled_polygon2D(
 	POLYGON2D_PTR poly, //要渲染的多边形
 	UCHAR *vbuffer, //视频缓存
@@ -79,7 +79,7 @@ void Draw_Filled_Polygon2D16(
 
 *Translate_Polygon2D*
 
-```C++
+```c++
 int Translate_Polygon2D(
 	POLYGON2D_PTR poly, //要平移的多边形
 	int dx, int dy); //平移因子
@@ -89,7 +89,7 @@ int Translate_Polygon2D(
 
 *Rotate_Polygon2D*
 
-```C++
+```c++
 int Rotate_Polygon2D(
 	POLYGON2D_PTR poly, //poly to rotate
 	int theta); //angle 0-359
@@ -99,7 +99,7 @@ int Rotate_Polygon2D(
 
 *Scale_Polygon2D*
 
-```C++
+```c++
 int Scale_Polygon2D(POLYGON2D_PTR poly, // poly to scale
                    float sx, float sy); // scale factors
 ```
@@ -110,7 +110,7 @@ int Scale_Polygon2D(POLYGON2D_PTR poly, // poly to scale
 
 *Draw_Clip_Line*
 
-```C++
+```c++
 Draw_Clip_Line(int x0, int y0, //起点
               int x1, int y1, //终点
               int color, //8位
@@ -129,7 +129,7 @@ int Draw_Clip_Line(int x0, int y0, //起点
 
 *Clip_Line*
 
-```C++
+```c++
 int Clip_Line(int &x1, int &y1, //起点
 			int &x2, int &y2); // 终点
 ```
@@ -138,7 +138,7 @@ int Clip_Line(int &x1, int &y1, //起点
 
 *Draw_Line*
 
-```C++
+```c++
 int Draw_Line(int x0, int y0,
 			int x1, int y1,
 			UCHAR *vb_start,
@@ -156,7 +156,7 @@ DrawLine函数绘制一条直线，不做任何裁剪，因此需要确保端点
 
 *Draw_Pixel*
 
-```C++
+```c++
 inline int Draw_Pixel(int x, int y,
                      int color,
                      UCHAR *video_buffer,
@@ -173,7 +173,7 @@ inline int Draw_Pixel16(int x, int y,
 
 *Draw_Rectangle*
 
-```C++
+```c++
 int Draw_Rectangle(int x1, int y1,
                   int x2, int y2,
                   int color,
@@ -184,7 +184,7 @@ int Draw_Rectangle(int x1, int y1,
 
 *HLine*
 
-```C++
+```c++
 void HLine(int x1, int x2,
           int y,
           int color,
@@ -202,7 +202,7 @@ void HLine16(int x1, int x2,
 
 *VLine*
 
-```C++
+```c++
 void VLine(int y1, int y2,
           int x,
           int color,
@@ -220,7 +220,7 @@ void VLine16(int y1, int y2,
 
 *Screen_Transitions*
 
-```C++
+```c++
 void Screen_Transitions(int effect,
                        UCHAR *vbuffer,
                        int lpitch);
@@ -241,7 +241,7 @@ void Screen_Transitions(int effect,
 
 *Draw_Text_GDI*
 
-```C++
+```c++
 int Draw_Text_GDI(char **text, //以NULL结尾的字符串
                  int x, int y, //位置
                  COLORREF color, //RGB颜色
