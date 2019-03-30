@@ -42,7 +42,7 @@ tags: [Game Programming]
 
 {% include image_caption.html imageurl="/images/posts/rel_math.png" title="The relationship between mathematics engine and game system" caption="The relationship between mathematics engine and game system" %}
 
-该图描述了数学引擎与游戏系统中其他文件的关系。数学库T3DLIB4.CPP依赖于T3DLIB1.CPP中的某些数据结构，因此总是需要链接T3DLIB1.CPP|H。而T3DLIB1.CPP|H又依赖于DDRAW.H，因此必须在T3DLIB4.CPP中包含DDRAW.H。这意味着要在其他地方独立使用该数学库模块，需要将T3DLIB1.CPP中的几个函数和T3DLIB1.H中的#defines语句分别复制到T3DLIB4.CPP和T3DLIB4.H中。
+该图描述了数学引擎与游戏系统中其他文件的关系。数学库T3DLIB4.CPP依赖于T3DLIB1.CPP中的某些数据结构，因此总是需要链接T3DLIB1.CPP\|H。而T3DLIB1.CPP\|H又依赖于DDRAW.H，因此必须在T3DLIB4.CPP中包含DDRAW.H。这意味着要在其他地方独立使用该数学库模块，需要将T3DLIB1.CPP中的几个函数和T3DLIB1.H中的#defines语句分别复制到T3DLIB4.CPP和T3DLIB4.H中。
 
 数学引擎本身由很多函数组成（对它们测试并不容易），它们用于处理点、向量、直线、矩阵、四元数等。
 
@@ -52,7 +52,7 @@ tags: [Game Programming]
 
 ### 数据结构和类型
 
-下面介绍的数据引擎使用的数据结构和类型。在很多程度上说，90%的类型和数据结构都是全新的，但也使用了T3DLIB1|H中的一些类型和数据结构，用于执行简单的矩阵运算。
+下面介绍的数据引擎使用的数据结构和类型。在很多程度上说，90%的类型和数据结构都是全新的，但也使用了T3DLIB1\|H中的一些类型和数据结构，用于执行简单的矩阵运算。
 
 该数学引擎支持很多数据类型，包括点、向量、矩阵、四元数、参数化直线、3D平面、极坐标、柱面坐标、球面坐标和定点数等。下面依次介绍这些数据结构。
 
@@ -330,7 +330,7 @@ typedef int *FIXP16_PTR;
 
 
 
-{% include image_full.html imageurl="/images/posts/yahh.jpg" title="change" caption="change" %}
+{% include image_full.html imageurl="/images/posts/yahh.jpg" title="yahh" caption="yahh" %}
 
 
 ### Poetry
