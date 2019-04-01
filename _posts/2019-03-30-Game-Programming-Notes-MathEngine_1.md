@@ -1,6 +1,6 @@
 ---
 layout: post
-title:  "Game Programming Notes -- Math_Engine"
+title:  "Game Programming Notes -- Math_Engine_1"
 date:   2019-03-30
 banner_image: math.jpg
 tags: [Game Programming]
