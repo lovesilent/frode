@@ -5,7 +5,7 @@ date:   2019-04-10
 banner_image: bridge_sea.jpg
 tags: [SoulJourney]
 ---
-25岁，虽仍迷惑，不忘初心。
+25岁，仍虽迷惑，不忘初心。
 
 <!--more-->
 
@@ -40,10 +40,6 @@ tags: [SoulJourney]
    
 
 7. 承担压力，甩掉压抑
-
-
-
-## 保持健康与快乐！
 
 
 
