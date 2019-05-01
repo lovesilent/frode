@@ -111,7 +111,7 @@ int Mat_Mul_1X2_3X2(MATRIX1X2_PTR ma, MATRIX3X2_PTR mb, MATRIX1X2_PTR mprod)
 
 {% include image_caption.html imageurl="/images/posts/Uvmm_1232.png" title="Undefined vector-matrix multiplication (1x2)\*(3x2)" caption="Undefined vector-matrix multiplication (1x2)\*(3x2)" %}
 
-![1556678843732](C:\Users\wuyu\Desktop\notes\1556678843732.png)
+
 
 ```c++
 void Mat_Mul_VECTOR3D_4X3(VECTOR3D_PTR va, MATRIX4X3_PTR mb, VECTOR3D_PTR vprod);
