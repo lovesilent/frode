@@ -1,13 +1,13 @@
 ---
 layout: post
-title:  "Game Programming Notes -- Math_Engine_6"
-date:   2019-06-05
+title:  "Game Programming Notes -- Math_Engine_5"
+date:   2019-05-01
 banner_image: math.jpg
 tags: [Game Programming]
 ---
 《3D游戏编程大师技巧》 笔记
 
-   Math_Engine—— 数学引擎API（2）
+   Math_Engine—— 数学引擎API（1）
 
 <!--more-->
 
@@ -15,326 +15,204 @@ tags: [Game Programming]
 
 ------
 
-### 数学引擎API清单（2）
+### 数学引擎API清单（1）
 
-下面介绍整个数学引擎API的下半部分
+下面介绍整个数学引擎API的上半部分
 
-<u>3D平面支持函数</u>
-
-该数学引擎中添加了对3D平面抽象实体的支持。实际上，在99%以上的时间，我们处理的都是封闭多边形（位于同一个平面中），因此后面可能需要对这些函数进行改进。现在，我们只要知道如何定义平面，然后使用平面操作即可。
-
-现在采用点-法线方式来表示平面，如下图所示：
-
-{% include image_caption.html imageurl="/images/posts/Define_3D_plane_point_normal.png" title="Define the 3D plane with a point-normal" caption="Define the 3D plane with a point-normal" %}
-$$
-nx*(x-x0)+ny*(y-y0)+nz*(z-z0)=0
-$$
-其中
-$$
-\mathbf{n}=<nx,ny,nz>, \quad \mathbf{p0}=<x0,y0,z0>
-$$
-使用这种格式时，我们将平面存储为平面的法线和平面上的一个点。法线不必是单位向量。下面是3D平面的结构：
+<u>三角函数</u>
 
 ```c++
-typedef struct PLANE3D_TPY
+float Fast_Sin(float theta)
 {
-    POINT3D p0; //平面上的一点
-    VECTOR3D n; //平面上的法线（不必是单位向量）
-} PLANE3D, *PLANE3D_PTR;
-```
-
-同样，数学库中的很多函数旨在简化一些经常需要执行的重复性计算，或者简化数学对象或几何对象的表示。
-
-```c++
-void PLANE3D_Init(PLANE3D_PTR plane, POINT3D_PTR p0, VECTOR3D_PTR normal, int normalize);
-```
-
-PLANE3D_Init()函数使用指定的点和法线来初始化一个3D平面。另外，该函数可以对指定的法线进行归一化，使其长度为1.0。要进行归一化，需要将normalize参数设置为TRUE；否则，它将设置为FALSE。在很多光照和背面消除计算中，知道多边形或平面的法线长度为1.0会很有帮助。
-
-```c++
-float Compute_Point_In_Plane3D(POINT3D_PTR pt, PLANE3D_PTR plane)
-{
-	//检测点是在平面上、正半空间还是负半空间
-    float hs = plane->n.x*(pt->x - plane->p0.x) + plane->n.y*(pt->y - plane->p0.y) + plane->n.z*(pt->z - plane->p0.z);
-    // 返回检测结果
-    return(hs);
-}
-```
-
-用途：它是一个很有用的函数。它判断指定点位于哪个半空间中。很多时候，需要判断某样东西位于平面的哪一边，该函数正好提供了这种功能。下图说明了该函数的逻辑。如果指定点位于平面上，该函数返回0.0；如果位于正半空间中，返回一个正数；如果位于负半空间中，则返回负值。
-
-![1556762927841](C:\Users\wuyu\Desktop\notes\半空间逻辑编码.png)
-
-```c++
-int Intersect_Parm_Line3D_Plane3D(PARMLINE3D_PTR pline, PLANE3D_PTR plane, float *t, POINT3D_PTR pt)
-{
-    //这个函数计算参数化直线与平面的交点
-    //计算交点时，该函数将参数化直线视为无穷长
-    //如果交点在线段pline上，则参数t的值位于范围【0，1】内
-    //另外，如果不相交，该函数返回0，如果交点在线段上，返回1
-    //如果交点不在线段上，2返回，如果线段位于平面上，则返回3
+    //该函数使用查找表sin_look[]
+    //但能够通过插值计算负角度和小数角度的正弦
+    //因此与查找表相比，精度更高，但速度可能低些
     
-    //首先判断线段和平面是否平行
-    //如果是，则它们不可能相交，除非线段位于平面上
-    float plane_dot_line = VECTOR3D_Dot(&pline->v,&plane->n);
-    if(fabs(plane_dot_line)<=EPSILON_E5)
+    //将角度转换为0~359的值
+    theta=fmodf(theta, 360);
+    //将角度转换为正值
+    if(theta<0) theta+=360.0;
+    
+    //提取角度的整数部分和小数部分，以便进行插值计算
+    int theta_int = (int)theta;
+    float theta_frac = theta - theta_int;
+    
+    //使用查找表并根据小数部分进行插值来计算正弦
+    //如果theta_int为359，则加1后将为360
+    //但没有关系，一位内查找表中包含360度的正弦值
+    return (sin_look[theta_int]+theta_frac*(sin_look[theta_int+1]-sin_look[theta_int]))
+} // end Fast_Sin
+```
+
+该函数使用查找表sin_look[]并通过线性插值来计算参数的正弦值。与仅使用查找表相比，它们的精度更高；同时与使用C/C++内部数学库函数sin()和cos()相比，速度更快。参数theta必须以度为单位。
+
+{% include image_caption.html imageurl="/images/posts/Precision_trigonometric.png" title="Precision_trigonometric" caption="Precision_trigonometric" %}
+
+<u>坐标系支持函数</u>
+
+这部分API函数处理笛卡尔坐标与极坐标、柱面坐标和球面坐标之间的转换。每个函数都是按照第4章介绍的数学理论来实现的。就不具体介绍了，仔细观察函数原型就能知道该函数的具体功能了。
+
+<u>矩阵支持函数</u>
+
+这套函数用于处理矩阵数学运算和矩阵变换。一般而言，3D引擎根据不同的需要使用3x3或4x4矩阵，但有时候也使用4x3矩阵，并对最后一列做出假设。我们有3D点和4D点数据结构，虽然有时候需要对矩阵数学进行很多优化，但在早期尽量一般化没什么坏处。另外，虽然作者尽可能地考虑了可能需要的各种矩阵乘法和矩阵变换，但肯定会有遗漏——但以后可以添加它们。最后，虽然数学引擎支持2x2、3x3和4x4矩阵，但一些较老的2x2矩阵支持位于T3DLIB１.CPP\|H模块中。
+
+具体的函数在函数原型中都有相应体现。
+
+```c++
+void Mat_Init_2X2(MATRIX2X2_PTR ma, float m00, float m01, float m10, float m11);
+```
+
+该函数使用指定的浮点数按先行后列的顺序初始化矩阵ma。
+
+```c++
+void Mat_Add_2X2(MATRIX2X2_PTR ma, MATRIX2X2_PTR mb, MATRIX2X2_PTR msum);
+```
+
+该函数将两个矩阵相加（ma+mb)，并将结果存储到msum中。
+
+```c++
+void Mat_Mul_2X2(MATRIX2X2_PTR ma, MATRIX2X2_PTR mb, MATRIX2X2_PTR mprod);
+```
+
+该函数将两个矩阵相乘，并将结果存储到mprod中。这里矩阵显示地相乘，而不是用循环操作。这种方法更优化。
+
+```c++
+int Mat_Mul_1X2_3X2(MATRIX1X2_PTR ma, MATRIX3X2_PTR mb, MATRIX1X2_PTR mprod)
+{
+    // 这个函数将一个1x2矩阵与一个3x2矩阵相乘，并存储结果
+    // 这里假设1x2矩阵的第三个元素为1，使这种矩阵乘法合法，即变成1x3 X 3x2
+    for(int col=0; col<2; col++)
     {
-        //线段与平面平行
-        //它是否在平面上
-        if(fabs(Compute_Point_In_Plane3D(&pline->p0,plane))<=EPSILON_E5)
-            return(PARM_LINE_INTERSECT_EVERYWHERE);
-        else
-            return(PARM_LINE_NO_INTERSECT);
-    }
+        // 计算函数将一个1x2矩阵与一个3x2矩阵相乘，并存储结果
+        // 这里假设1x2矩阵的第三个元素为1，使这种矩阵乘法合法，即变成1x3 X 3x2
+        for(int col=0; col<2; col++)
+        {
+            // 计算ma中的行与mb中的列之间的点积
+            float sum=0; //用于存储结果
+            for(int index=0; index<2; index++)
+            {
+                // 累积下一对元素的乘积
+                sum+=(ma->M[index]*mb->M[index][col]);
+            } // end for index
+        }
+        // 累积最后一个元素与1的乘积
+        sum+=mb->M[index][col];
+        
+        // 将结果存储到第col个元素中
+        mprod->M[col]=sum;
+    } // end for col
+    return(1);
+} // end Mat_Mul_1X2_3X2
+```
+
+用途：Mat_Mul_1X2_3X2函数是一个专用函数，将一个1x2矩阵（实际上是2D点）与一个3x2矩阵（表示旋转或平移）相乘。这种运算在数学上是未定义的，因为他们的内维度不相同。然而，如果假设1x2实际是一个1x3矩阵，其最后一个元素为1，将可以执行这种乘法。下图说明了执行该乘法的过程。
+
+{% include image_caption.html imageurl="/images/posts/Uvmm_1232.png" title="Undefined vector-matrix multiplication (1x2)\*(3x2)" caption="Undefined vector-matrix multiplication (1x2)\*(3x2)" %}
+
+```c++
+void Mat_Mul_VECTOR3D_4X3(VECTOR3D_PTR va, MATRIX4X3_PTR mb, VECTOR3D_PTR vprod);
+```
+
+用途：Mat_Mul_VECTOR3D_4x3将一个3D向量与一个4x3矩阵相乘。它假设在向量va中存在第四个元素，且等于1.0，以便于执行乘法运算。由于在4x3矩阵中只有三列，所以结果自然为3D向量。
+
+<u>2D和3D参数化直线支持函数</u>
+
+大多数时候，参数化直线需要在代码中使用一个向量和一个参数t手工编写参数化直线的代码。然而，既然大多数时候都将使用一个向量和一个参数t，为什么不将它们封装到一个结构（或没有方法的类）中，然后以此为基础创建常用函数，如计算交点的函数呢？因此，数学引擎提供了对2D和3D参数化直线的支持以及一整套相关的函数。
+
+为帮助回顾，下面再次给出2D参数化直线的结构：
+
+```c++
+typedef struct PARMLINE2D_TYP
+{
+	POINT2D p0;
+    POINT2D p1;
+    VECTOR2D v; // 方向向量
+} PARMLINE2D, *PARMLINE2D_PTR;
+```
+
+下面是3D参数化直线的结构：
+
+```c++
+typedef struct PARMLINE3D_TYP
+{
+    POINT3D p0;
+    POINT3D p1;
+    VECTOR3D v;
+} PARMLINE3D, *PARMLINE3D_PTR;
+```
+
+2D版本和3D版本的唯一差别在于z坐标；除此之外，它们以相同的格式存储相同的信息。下面分别介绍这些函数。
+
+```c++
+void Init_Parm_Line2D(POINT2D_PTR p_init, POINT2D_PTR p_term, PARMLINE2D_PTR p);
+```
+
+用途：该函数根据指定的点计算它们之间的向量，并初始化一条2D参数化直线。注意，该向量是在函数内部生成的。
+
+```c++
+void Compute_Parm_LINE2D(PARMLINE2D_PTR p, float t, POINT2D_PTR pt);
+```
+
+用途：该函数计算2D参数化直线在参数t处的值，并将返回到指定的点中。参数t=0时，结果为起点p0；参数t=1时，结果为终点p1。也就是说，当t从0变化到1时，将从p0移动到p1。
+
+```c++
+int Intersect_Parm_Lines2D(PARMLINE2D_PTR p1, PARMLINE2D_PTR p2, float *t1, float *t2)
+{
+    //这个函数计算两条参数化线段的交点
+    //并将t1和t2分别设置交点在p1和p2
+    //然而，t值可能不在范围[0,1]内
+    //这意味着线段本身没有相交，但它们对应的直线是相交的
+    //函数的返回值为0，表示没有相交，1表示交点在线段上，
+    //2表示相交，但交点不一定在线段上，3表示两条线段位于同一条直线上
     
-    // 可以按照下述方式计算交点对应的值
-    // a*(x0+vx*t) + b*(y0+vy*t) + c*(z0+vz*t) + d =0
-    // t=-(a*x0+b*y0+c*z0+d)/(a*vx+b*vy+c*vz)
-    // x0、y0、z0、vx、vy、vz定义了线段
-    // d=(-a*xp0-b*yp0-c*zp0), xp0、yp0、zp0定义了平面上的一个点
-    *t=-(plane->n.x*pline->p0.x + 
-         plane->n.y*pline->p0.y + 
-         plane->n.z*pline->p0.z -
-         plane->n.x*plane->p0.x - 
-         plane->n.y*plane->p0.y -
-         plane->n.z*plane->p0.z);
-    // 将t带入参数化直线方程，以计算x、y、z
-    pt->x = pline->p0.x + pline->v.x*(*t);
-    pt->y = pline->p0.y + pline->v.y*(*t);
-    pt->z = pline->p0.z + pline->v.z*(*t);
+    //我们知道两条线段的参数化方程，需要计算交点（如果有的话）对应的t1和t2
     
-    //检测t是否在范围【0，1】内
-    if(*t>=0.0 && *t<=1.0)
+    //第1步：检测它们是否平行
+    //如果一个方向向量是另一个向量与一个标量的乘积，则说明两条线段平行
+    //除非它们重叠，否则不可能相交
+    float det_p1p2 = (p1->v.x*p2->v.y - p1->v.y*p2->v.x);
+    if(fabs(det_p1p2)<=EPSILON_E5)
+    {
+        //这表明两条线段要么根本不相交，要么位于同一条直线上
+        //在后一种情况下，可能有一个或多个交点
+        //现在暂时假设它们不相交，以后需要时再重新编写函数，以考虑重叠的情况
+        return(PARM_LINE_NO_INTERSECT);
+    } // end if
+    
+    //第2步：计算t1和t2的值
+    //我们有两条以下述方式表示的线段
+    //p=p0+v*t
+    //p1=p10+v1*t1
+    
+    //p1.x = p10.x+v1.x*t1
+    //p2.y = p10.y+v1.y*t1
+    
+    //p2=p20+v2*t2
+    
+    //p2.x = p20.x+v2.x*t2
+    //p2.y = p20.y+v2.y*t2
+    
+    //前面也介绍过如何计算交点
+    *t1 = (p2->v.x*(p1->p0.y-p2->p0.y) - p2->v.y*(p1->p0.x - p2->p0.x))/det_p1p2;
+    *t2 = (p1->v.x*(p1->p0.y-p2->p0,y) - p1->v.y*(p1->p0.x - p2->p0.x))/det_p1p2;
+    
+    // 检查交点是否在线段上
+    if((*t1>=0)&&(*t1<=1) && (*t2>=0) && (*t2<=1))
         return(PARM_LINE_INTERSECT_IN_SEGMENT);
     else
         return(PARM_LINE_INTERSECT_OUT_SEGMENT);
-}
+} // end Intersect_Parm_Line2D
 ```
 
-用途：该函数计算一条3D参数化直线与一个3D平面的交点，将交点处的参数值存储到t中，并将交点存储到pt中。然而，在使用这些数据之前，需要测试该函数的返回值，以确定是否存在交点。返回值与计算2D交点的函数相同，但增加了一个标记，用于指出点位于平面上。
+用途：Intersect_Parm_Lines2D计算两条参数化直线p1和p2的交点，并将交点对应的参数值t1和t2分别存储到相应的变量中。根据两条直线是否相交以及交点是否在线段上，该函数有下列返回值。
 
 ```c++
 #define PARM_LINE_NO_INTERSECT 0
 #define PARM_LINE_INTERSECT_IN_SEGMENT 1
 #define PARM_LINE_INTERSECT_OUT_SEGMENT 2
-#define PARM_LINE_INTERSECT_EVERYWHERE 3
 ```
 
-<u>四元数支持函数</u>
-
-必须指出的是，编写四元数并不容易！问题在于必须确保它们能够正常工作。需要在草稿纸上进行双重检查，因为四元数没有太多的物理意义，无法以图形方式进行检查。然而，最终它们都能正常工作。四元函数使得很多操作都变得非常简单。例如，对于绕任意直线旋转的问题，如果使用四元数来求解将非常容易，而使用欧拉方程则非常复杂。前面介绍过，四元数就是一个超复数，它有4个分量，其中一个为实部（通常称为q0或w），另外3个为虚部（通常称为q1、q2、q3)。
-
-```c++
-//为了能够以多种访问形式来访问它们。下面的数据结构QUAT使用几个共用体实现了这种功能
-typedef struct QUAT_TYP
-{
-	union
-	{
-		float M[4]; //按顺序w、x、y、z 以数组方式存储
-        // “向量部分 + 实部“ 格式
-		struct
-		{
-			float q0; //实部
-			VECTOR3D qv;//虚部
-		};
-        struct
-        {
-            float w,x,y,z;
-        };
-	};
-} QUAT, *QUAT_PTR;
-```
-
-```c++
-void VECTOR3D_Theta_To_QUAT(QUAT_PTR q, VECTOR3D_PTR v, float theta)
-{
-	//使用一个3D方向向量和一个角度来初始化一个四元数
-    //方向向量必须是单位向量，角度的单位为弧度
-    
-    float theta_div_2 = (0.5)*theta; //计算theta/2
-    
-    //计算四元数
-    //预先计算以节省时间
-    float sinf_theta=sinf(theta_div_2);
-    q->x = sinf_theta * v->x;
-    q->y = sinf_theta * v->y;
-    q->z = sinf_theta * v->z;
-    q->w = cosf(theta_div_2);
-}// end VECTOR3D_Theta_To_QUAT
-```
-
-用途：该函数根据方向向量v和角度theta创建一个旋转四元数。下图说明了其中的关系。这个函数主要用于创建对点进行旋转的四元数。注意，方向向量v必须为单位向量。另外，4D向量版本将丢弃w分量。
-
-![1557226249126](C:\Users\wuyu\Desktop\notes\创建旋转四元数.png)
-
-
-
-```c++
-void EulerZYX_To_QUAT(QUAT_PTR q, float theta_z, float theta_y, float theta_x)
-{
-    // 这个函数根据绕x、y、z旋转的角度，创建一个zyx顺序进行旋转对应的四元数
-    // 注意，还有11个根据旋转角度创建四元数的函数
-    
-    //预先计算一些值
-    float cos_z_2 = 0.5*cosf(theta_z);
-    float cos_y_2 = 0.5*cosf(theta_y);
-    float cos_x_2 = 0.5*cosf(theta_x);
-    
-    float sin_z_2 = 0.5*sinf*(theta_z);
-    float sin_y_2 = 0.5*sinf*(theta_y);
-    float sin_x_2 = 0.5*sinf*(theta_x);
-    
-    //计算四元数
-    q->w = cos_z_2*cos_y_2*cos_x_2 + sin_z_2*sin_y_2*sin_x_2;
-    q->x = cos_z_2*cos_y_2*sin_x_2 - sin_z_2*sin_y_2*cos_x_2;
-    q->y = cos_z_2*sin_y_2*cos_x_2 + sin_z_2*cos_y_2*sin_x_2;
-    q->x = sin_z_2*cos_y_2*cos_x_2 - cos_z_2*sin_y_2*sin_x_2;
-    
-} // EulerZYX_To_QUAT
-```
-
-用途：该函数根据z、y、x旋转的欧拉角创建一个旋转四元数。它是一种基本的相机转换。当然，旋转顺序共有6种（3的阶乘），但这种顺序是最常见的。使用这个函数可将欧拉旋转角转换为四元数。
-
-```c++
-void QUAT_To_VECTOR3D_Theta(QUAT_PTR q, VECTOR3D_PTR v, float *theta)
-{
-    // 这个函数将一个单位四元数转换为一个单位方向向量和一个绕该方向向量旋转的角度
-    
-    // 提取角度
-    *theta = acosf(q->w);
-    
-    //预先计算以节省时间
-    float sinf_theta_inv = 1.0/sinf(*theta);
-    
-    //计算向量
-    v->x = q->x*sinf_theta_inv;
-    v->y = q->y*sinf_theta_inv;
-    v->z = q->z*sinf_theta_inv;
-    
-    //将角度乘以2
-    *theta*=2;
-}// end QUAT_To_VECTOR3D_Theta
-```
-
-用途：该函数将一个单位旋转四元数转换为一个单位3D向量和与一个绕该向量旋转的角度theta。
-
-```c++
-void QUAT_Mul(QUAT_PTR q1, QUAT_PTR q2, QUAT_PTR qprod)
-{
-    // 这个函数将两个四元数相乘
-    // 先介绍一种蛮干方法
-    /*
-    qprod->w = q1->w*q2->w - q1->x*q2->x - q1->y*q2->y - q1->z * q2->z;
-    qprod->x = q1->w*q2->x + q1->x*q2->w + q1->y*q2->z - q1->z*q2->y;
-    qprod->y = q1->w*q2->y - q1->x*q2->z + q1->y*q2->w - q1->z*q2->x;
-    qprod->z = q1->w*qw->z + q1->x*q2->y - q1->y*q2->x + q1->z*q2->w;
-    */
-    
-    // 然后介绍下述先计算共用因子的方法，以减少乘法运算次数
-    float prd_0 = (q1->z - q1->y) * (q2->y - q2->z);
-    float prd_1 = (q1->w + q1->x) * (q2->w - q2->x);
-    float prd_2 = (q1->w - q1->x) * (q2->y + q2->z);
-    float prd_3 = (q1->y + q1->z) * (q2->w - q2->x);
-    float prd_4 = (q1->z - q1->x) * (q2->x - q2->y);
-    float prd_5 = (q1->z + q1->x) * (q2->x + q2->y);
-    float prd_6 = (q1->w + q1->y) * (q2->w - q2->z);
-    float prd_7 = (q1->w - q1->y) * (q2->w + q2->z);
-    
-    float prd_8 = prd_5 + prd_6 + prd_7;
-    float prd_9 = 0.5 * (prd_4 + prd_8);
-    
-    // 现在使用临时乘积计算最后结果
-    qprod->w = prd_0 + prd_9 - prd_5;
-    qprod->x = prd_1 + prd_9 - prd_8;
-    qprod->y = prd_2 + prd_9 - prd_7;
-    qprod->z = prd_3 + prd_9 - prd_6;
-} // end QUAT_Mul
-```
-
-最开始使用蛮力方法，根据乘法定义将四元数相乘（共16次乘法，12次加法）；然后使用一些代数公式，将计算简化为9次乘法和27次加法。通常，可能后一种方法更好，但在浮点处理器上可能并非如此。
-
-<u>定点数支持函数</u>
-
-在数学引擎中添加一些操作定点数的函数是值得的。而且，在奔腾以上的处理器上，浮点数单元的速度与整数单元一样快，甚至更快，因此不再使用定点数来执行3D数学运算。然而，很多时候，同时使用浮点数单元和整数单元可以编写出真正优秀的算法，因此了解如何表示和操作定点数仍是件好事。
-
-```c++
-// 与定点数运算相关的常量
-#define FIXP16_SHIFT 16
-#define FIXP16_MAG 65536
-#define FIXP16_DP_MASK 0x0000ffff
-#define FIXP16_WP_MASK 0xffff0000
-#define FIXP16_ROUND_UP 0x00008000
-
-// 1 使用整数来创建定点数，只需将整数左移FIXP16_SHIFT位，将其放到定点数的整数部分中。但切记不要让定点数溢出。
-FIXP16 fp1 = (100 << FIXP16);
-
-//2 使用浮点数创建定点数，整数的二进制表示与浮点数的二进制表示有很大的不同。因此，需要对浮点数进行缩放，缩放比例与对整数进行移位的程度相同。
-FIXP16 fp1 = (int)(100.4*65536);
-
-//3 转换回浮点数
-float ((float)fp)/65536.0;
-```
-
-关于加/减法、乘/除法也就不再详细介绍了。
-
-<u>方程求解支持函数</u>
-
-接下来介绍两个很有用的函数，能够求解A*X=B形式的方程组。
-
-```c++
-int Solve_2X2_System(MATRIX2X2_PTR A, MATRIX1X2_PTR X, MATRIX1X2_PTR B)
-{
-	//使用克莱姆法则和行列式计算X=A(-1)*B
-    //1 计算A的行列式的值
-    float det_A = Mat_Det_2X2(A);
-    
-    //检测det_A是否为0，如果是，则方程组无解
-    if(fabs(det_A)<EPSILON_E5)
-        return(0);
-    
-    //2 分别将矩阵A中的X、Y列替换为矩阵B，得到分子矩阵以计算x和y的解
-    MATRIX2X2 work_mat; //工作矩阵
-    
-    // 求解 x
-    
-    // 将A复制到工作矩阵中
-    MAT_COPY_2X2(A, &work_mat);
-    
-    // 替换X列
-    MAT_COLUMN_SWAP_2X2(&work_mat,0,B);
-    
-    // 计算替换后的行列式值
-    float det_ABx = Mat_Det_2X2(&work_mat);
-    
-    // 计算X的解
-    X->M00 = det_ABx/det_A;
-    
-    // 求解Y
-    
-    // 将A复制到工作矩阵中
-    MAT_COPY_2X2(A, &work_mat);
-    
-    // 替换Y列
-    MAT_COLUMN_SWAP_2X2(&work_mat,1,B);
-    
-    //计算替换后的行列式值
-    float det_ABy = Mat_Det_2X2(&work_mat);
-    
-    // 计算Y的解
-    X->M01 = det_ABy/det_A;
-    
-    // 成功返回 
-    return(1);
-} // end Solve_2X2_System
-```
-
-用途：该函数用于求解方程组A*X=B，其中A为2x2，X为1x2，B为1x2矩阵。如果有解，将其存储在B中，且函数返回1；否则函数返回0，且B未定义。另外，请参考函数代码，查看函数的内部结构。该函数使用克莱姆法则来求解方程组。
-
-
-
-{% include image_caption.html imageurl="/images/posts/Uvmm_1232.png" title="Undefined vector-matrix multiplication (1x2)\*(3x2)" caption="Undefined vector-matrix multiplication (1x2)\*(3x2)" %}
-
-
+该函数不检测两条直线是否共线，因为这将极大地降低速度，同时有太多的情况（部分重叠、包含、只有一点重叠等）需要检测。因此，调用该函数前需要检查这些条件，或者在该函数中添加这些功能。请记住，这些参数化直线实际上是线段，同时非平行线总会在某一点相交，因此该函数将计算出其交点。
 
 
 
