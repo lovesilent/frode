@@ -63,7 +63,7 @@ float Compute_Point_In_Plane3D(POINT3D_PTR pt, PLANE3D_PTR plane)
 
 用途：它是一个很有用的函数。它判断指定点位于哪个半空间中。很多时候，需要判断某样东西位于平面的哪一边，该函数正好提供了这种功能。下图说明了该函数的逻辑。如果指定点位于平面上，该函数返回0.0；如果位于正半空间中，返回一个正数；如果位于负半空间中，则返回负值。
 
-![1556762927841](C:\Users\wuyu\Desktop\notes\半空间逻辑编码.png)
+{% include image_caption.html imageurl="/images/posts/Half_space_lc.png" title="Half space logic coding" caption="Half space logic coding" %}
 
 ```c++
 int Intersect_Parm_Line3D_Plane3D(PARMLINE3D_PTR pline, PLANE3D_PTR plane, float *t, POINT3D_PTR pt)
@@ -165,9 +165,7 @@ void VECTOR3D_Theta_To_QUAT(QUAT_PTR q, VECTOR3D_PTR v, float theta)
 
 用途：该函数根据方向向量v和角度theta创建一个旋转四元数。下图说明了其中的关系。这个函数主要用于创建对点进行旋转的四元数。注意，方向向量v必须为单位向量。另外，4D向量版本将丢弃w分量。
 
-![1557226249126](C:\Users\wuyu\Desktop\notes\创建旋转四元数.png)
-
-
+{% include image_caption.html imageurl="/images/posts/Create_rotation_quaternion.png" title="Create a rotation quaternion" caption="Create a rotation quaternion" %}
 
 ```c++
 void EulerZYX_To_QUAT(QUAT_PTR q, float theta_z, float theta_y, float theta_x)
@@ -332,19 +330,15 @@ int Solve_2X2_System(MATRIX2X2_PTR A, MATRIX1X2_PTR X, MATRIX1X2_PTR B)
 
 
 
-{% include image_caption.html imageurl="/images/posts/Uvmm_1232.png" title="Undefined vector-matrix multiplication (1x2)\*(3x2)" caption="Undefined vector-matrix multiplication (1x2)\*(3x2)" %}
-
-
-
-
-
-{% include image_full.html imageurl="/images/posts/Avengers_Endgame.jpg" title="Avengers: End Game" caption="Avengers: End Game" %}
+{% include image_full.html imageurl="/images/posts/naiguan.jpg" title="Avengers: End Game" caption="奶罐" %}
 
 
 ### Poetry
 
->I love you three thousand times.
+>你要相信你自己是最好的，
 >
->I am Iron Man
+>不是第二，第三，
 >
-><cite>― Avengers: Endgame</cite>
+>你就是第一！
+>
+><cite>― 星爷： 新喜剧之王</cite>
