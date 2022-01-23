@@ -23,7 +23,7 @@ $$\frac{1}{\Bigl(\sqrt{\phi \sqrt{5}}-\phi\Bigr) e^{\frac25 \pi}} = 1+\frac{e^{-
 因此只需要在html中引入MathJax的CDN就可以使用了。
 
 {% highlight html %}
-<script type="text/javascript" src="http://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
+<script type="text/javascript" src="https://cdn.mathjax.org/mathjax/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML">
 </script>
 
 在官方的文档中，还给出了一些MathJax与MarkDown在语法解析上存在分歧的相应解决方案（配置额外的scripts），这里就不详细列出了。
