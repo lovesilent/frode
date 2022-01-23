@@ -26,13 +26,13 @@ url: "https://lovesilent.github.io/frode/"
 # Site navigation - each item must have a title and a url.
 navigation:
 - text: Home
-  url: /
+  url: /frode/
 - text: About
-  url: /about/
+  url: /frode/about/
 # - text: Style Guides
 #   url: /style-guide/
 - text: Archives
-  url: /tags/
+  url: /frode/tags/
 
 # The shortname for your Disqus site to enable comments.
 disqus:
@@ -42,7 +42,7 @@ author_name: "Frode Wu"
 author_bio: "Frode is an engineer, designer, photographer and gamer."
 author_url:  "https://lovesilent.github.io/frode/"
 author_location: "Shanghai, China"
-author_image: /images/authorimage.png
+author_image: /frode/images/authorimage.png
 
 # Sidebar Add banner
 # banner_url: "https://lovesilent.org"
@@ -65,7 +65,7 @@ linkedin_username: "frodewu"
 
 # http://jekyllrb.com/docs/pagination/
 paginate: 5
-paginate_path: '/blog/page:num/'
+paginate_path: '/frode/blog/page:num/'
 gems: [jekyll-paginate]
 
 permalink: pretty
