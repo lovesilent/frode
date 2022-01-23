@@ -21,7 +21,7 @@ sass:
   sass_dir: _sass
 
 # The base hostname & protocol of your site for where absolute urls are needed
-url: "https://lovesilent.org"
+url: "https://lovesilent.github.io/frode"
 
 # Site navigation - each item must have a title and a url.
 navigation:
@@ -40,7 +40,7 @@ disqus:
 # Author information - author info at the bottom of the post
 author_name: "Frode Wu"
 author_bio: "Frode is an engineer, designer, photographer and gamer."
-author_url:  "https://lovesilent.org"
+author_url:  "https://lovesilent.github.io/frode/"
 author_location: "Shanghai, China"
 author_image: /images/authorimage.png
 
